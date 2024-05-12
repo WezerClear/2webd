@@ -1,57 +1,57 @@
-import React, { useState } from 'react';
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
-import SearchResultsPage from './Page/SearchResultsPage';
-import QuickSearchBar from './Components/QuickSearchBar';
+import React, { useEffect, useState } from "react";
+import "./App.css";
 
-async function handleSearch(query: string, options: { title?: boolean; tags?: boolean }) {
-  try {
-    let url = `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${query}`;
-    
-    // Ajouter les options de recherche à l'URL si elles sont définies
-    if (options.title) {
-      url += '&title=true';
-    }
-    if (options.tags) {
-      url += '&tags=true';
-    }
-
-    const response = await fetch(url);
-    const data = await response.json();
-    const results = data.objectIDs;
-
-    return results; // Retourner uniquement les résultats
-  } catch (error) {
-    console.error('Erreur lors de la recherche :', error);
-    return []; // En cas d'erreur, retourner un tableau vide
-  }
+interface ArtObject {
+  objectID: number;
+  title: string;
+  primaryImage: string;
 }
 
+const App: React.FC = () => {
+  const [artObjects, setArtObjects] = useState<ArtObject[]>([]);
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: (
-      <div>
-        <header>
-          {/* Passer la fonction de recherche au composant QuickSearchBar */}
-          <QuickSearchBar onSearch={handleSearch} />
-        </header>
-        <main>
-          <Outlet />
-        </main>
-        <footer>
-        </footer>
+  useEffect(() => {
+    const fetchArtObjects = async () => {
+      try {
+        const objectIDs = [5, 6, 7, 8, 9];
+
+        const objectsData: ArtObject[] = [];
+        for (const id of objectIDs) {
+          const objectResponse = await fetch(
+            `https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`
+          );
+          if (!objectResponse.ok) {
+            throw new Error("Failed to fetch object");
+          }
+          const objectData = await objectResponse.json();
+          objectsData.push({
+            objectID: objectData.objectID,
+            title: objectData.title,
+            primaryImage: objectData.primaryImage,
+          });
+        }
+        setArtObjects(objectsData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchArtObjects();
+  }, []);
+
+  return (
+    <div className="App">
+      <h1>Metropolitan Museum of Art</h1>
+      <div className="art-list">
+        {artObjects.map((artObject) => (
+          <div key={artObject.objectID} className="art-item">
+            <h2>{artObject.title}</h2>
+            <img src={artObject.primaryImage} alt={artObject.title} />
+          </div>
+        ))}
       </div>
-    ),
-    children: [
-      { path: 'search-results', element: <SearchResultsPage results={[]} totalResults={0} searchQuery="" categories={[]} /> }, // Assurez-vous que le type des résultats est correctement spécifié
-    ],
-  },
-]);
-
-function App() {
-  return <RouterProvider router={router} />;
-}
+    </div>
+  );
+};
 
 export default App;
-
