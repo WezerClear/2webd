@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     ),
     element: (
       <div>
-        <h1>Menu</h1>
+        <h1>Pokedex</h1>
         <Menu /> {/* Utilisez Menu sans accolades */}
         <Outlet />
       </div>
