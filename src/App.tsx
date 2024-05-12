@@ -1,57 +1,38 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import "./App.css";
+import Menu from "./Components/Menu"; // Utilisez une lettre minuscule pour "components"
+import DisplayHighlight from "./Page/DisplayHighlight"; // Assurez-vous que ce chemin est correct
 
-interface ArtObject {
-  objectID: number;
-  title: string;
-  primaryImage: string;
-}
-
-const App: React.FC = () => {
-  const [artObjects, setArtObjects] = useState<ArtObject[]>([]);
-
-  useEffect(() => {
-    const fetchArtObjects = async () => {
-      try {
-        const objectIDs = [5, 6, 7, 8, 9];
-
-        const objectsData: ArtObject[] = [];
-        for (const id of objectIDs) {
-          const objectResponse = await fetch(
-            `https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`
-          );
-          if (!objectResponse.ok) {
-            throw new Error("Failed to fetch object");
-          }
-          const objectData = await objectResponse.json();
-          objectsData.push({
-            objectID: objectData.objectID,
-            title: objectData.title,
-            primaryImage: objectData.primaryImage,
-          });
-        }
-        setArtObjects(objectsData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchArtObjects();
-  }, []);
-
-  return (
-    <div className="App">
-      <h1>Metropolitan Museum of Art</h1>
-      <div className="art-list">
-        {artObjects.map((artObject) => (
-          <div key={artObject.objectID} className="art-item">
-            <h2>{artObject.title}</h2>
-            <img src={artObject.primaryImage} alt={artObject.title} />
-          </div>
-        ))}
+const router = createBrowserRouter([
+  {
+    path: "/",
+    errorElement: (
+      <div>
+        Page non trouvée
+        <br />
+        <a href="/">Retour à l'accueil</a>
       </div>
-    </div>
-  );
-};
+    ),
+    element: (
+      <div>
+        <h1>Menu</h1>
+        <Menu /> {/* Utilisez Menu sans accolades */}
+        <Outlet />
+      </div>
+    ),
+    children: [
+      {
+        path: "/",
+        element: <DisplayHighlight />, // Assurez-vous que ce chemin est correct
+      },
+      // Ajoutez d'autres routes ici si nécessaire
+    ],
+  },
+]);
+
+function App() {
+  return <RouterProvider router={router} />;
+}
 
 export default App;
