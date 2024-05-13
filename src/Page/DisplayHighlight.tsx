@@ -9,6 +9,8 @@ interface ArtObject {
 
 const DisplayHighlight: React.FC = () => {
   const [artObjects, setArtObjects] = useState<ArtObject[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchResult, setSearchResult] = useState<ArtObject | null>(null);
 
   useEffect(() => {
     const fetchArtObjects = async () => {
@@ -39,9 +41,58 @@ const DisplayHighlight: React.FC = () => {
     fetchArtObjects();
   }, []);
 
+  const handleSearch = async () => {
+    try {
+      const searchResponse = await fetch(
+        `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${searchTerm}`
+      );
+      if (!searchResponse.ok) {
+        throw new Error("Failed to search object");
+      }
+      const searchData = await searchResponse.json();
+      if (searchData.objectIDs.length > 0) {
+        const objectID = searchData.objectIDs[0];
+        const objectResponse = await fetch(
+          `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`
+        );
+        if (!objectResponse.ok) {
+          throw new Error("Failed to fetch object");
+        }
+        const objectData = await objectResponse.json();
+        setSearchResult({
+          objectID: objectData.objectID,
+          title: objectData.title,
+          primaryImage: objectData.primaryImage,
+        });
+      } else {
+        setSearchResult(null);
+      }
+    } catch (error) {
+      console.error("Error searching data:", error);
+    }
+  };
+
   return (
     <div className="App">
       <h1>Metropolitan Museum of Art</h1>
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <button onClick={handleSearch}>Search</button>
+      </div>
+      {searchResult && (
+        <div className="search-result">
+          <h2>Search Result</h2>
+          <div className="art-item">
+            <h3>{searchResult.title}</h3>
+            <img src={searchResult.primaryImage} alt={searchResult.title} />
+          </div>
+        </div>
+      )}
       <div className="art-list">
         {artObjects.map((artObject) => (
           <div key={artObject.objectID} className="art-item">
