@@ -10,7 +10,7 @@ interface ArtObject {
 const DisplayHighlight: React.FC = () => {
   const [artObjects, setArtObjects] = useState<ArtObject[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchResult, setSearchResult] = useState<ArtObject | null>(null);
+  const [searchResults, setSearchResults] = useState<ArtObject[]>([]);
 
   useEffect(() => {
     const fetchArtObjects = async () => {
@@ -51,21 +51,24 @@ const DisplayHighlight: React.FC = () => {
       }
       const searchData = await searchResponse.json();
       if (searchData.objectIDs.length > 0) {
-        const objectID = searchData.objectIDs[0];
-        const objectResponse = await fetch(
-          `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`
-        );
-        if (!objectResponse.ok) {
-          throw new Error("Failed to fetch object");
+        const objectsData: ArtObject[] = [];
+        for (const objectID of searchData.objectIDs.slice(0, 5)) { 
+          const objectResponse = await fetch(
+            `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`
+          );
+          if (!objectResponse.ok) {
+            throw new Error("Failed to fetch object");
+          }
+          const objectData = await objectResponse.json();
+          objectsData.push({
+            objectID: objectData.objectID,
+            title: objectData.title,
+            primaryImage: objectData.primaryImage,
+          });
         }
-        const objectData = await objectResponse.json();
-        setSearchResult({
-          objectID: objectData.objectID,
-          title: objectData.title,
-          primaryImage: objectData.primaryImage,
-        });
+        setSearchResults(objectsData);
       } else {
-        setSearchResult(null);
+        setSearchResults([]);
       }
     } catch (error) {
       console.error("Error searching data:", error);
@@ -84,13 +87,15 @@ const DisplayHighlight: React.FC = () => {
         />
         <button onClick={handleSearch}>Search</button>
       </div>
-      {searchResult && (
-        <div className="search-result">
-          <h2>Search Result</h2>
-          <div className="art-item">
-            <h3>{searchResult.title}</h3>
-            <img src={searchResult.primaryImage} alt={searchResult.title} />
-          </div>
+      {searchResults.length > 0 && (
+        <div className="search-results">
+          <h2>Search Results</h2>
+          {searchResults.map((result) => (
+            <div key={result.objectID} className="art-item">
+              <h3>{result.title}</h3>
+              <img src={result.primaryImage} alt={result.title} />
+            </div>
+          ))}
         </div>
       )}
       <div className="art-list">

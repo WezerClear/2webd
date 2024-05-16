@@ -9,6 +9,9 @@ const Menu: React.FC = () => {
           <Link to="/">Accueil</Link>
         </li>
         <li>
+          <Link to="/advanced-search">Recherche Avancée</Link>
+        </li>
+        <li>
           <Link to="/contact">Contact</Link>
         </li>
       </ul>

@@ -1,8 +1,9 @@
 import React from "react";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import "./App.css";
-import Menu from "./Components/Menu"; // Utilisez une lettre minuscule pour "components"
-import DisplayHighlight from "./Page/DisplayHighlight"; // Assurez-vous que ce chemin est correct
+import Menu from "./Components/Menu"; 
+import DisplayHighlight from "./Page/DisplayHighlight"; 
+import AdvancedSearch from "./Page/AdvancedSearch";
 
 const router = createBrowserRouter([
   {
@@ -24,9 +25,12 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <DisplayHighlight />, // Assurez-vous que ce chemin est correct
+        element: <DisplayHighlight />, 
       },
-      // Ajoutez d'autres routes ici si nécessaire
+      {
+        path: "/advanced-search",
+        element: <AdvancedSearch />,
+      },
     ],
   },
 ]);
