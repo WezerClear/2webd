@@ -1,13 +1,16 @@
-import React from "react";
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
-import "./App.css";
-import Menu from "./Components/Menu"; 
-import DisplayHighlight from "./Page/DisplayHighlight"; 
-import AdvancedSearch from "./Page/AdvancedSearch";
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; 
+import './App.css';
+import Menu from './Components/Menu';
+import DisplayHighlight from './Page/DisplayHighlight';
+import AdvancedSearch from './Page/AdvancedSearch';
+
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     errorElement: (
       <div>
         Page non trouvée
@@ -18,17 +21,17 @@ const router = createBrowserRouter([
     element: (
       <div>
         <h1>Menu Musée</h1>
-        <Menu /> {/* Utilisez Menu sans accolades */}
+        <Menu /> {}
         <Outlet />
       </div>
     ),
     children: [
       {
-        path: "/",
-        element: <DisplayHighlight />, 
+        path: '/',
+        element: <DisplayHighlight />,
       },
       {
-        path: "/advanced-search",
+        path: '/advanced-search',
         element: <AdvancedSearch />,
       },
     ],
