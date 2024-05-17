@@ -4,7 +4,7 @@ import './App.css';
 import Menu from './Components/Menu';
 import DisplayHighlight from './Page/DisplayHighlight';
 import AdvancedSearch from './Page/AdvancedSearch';
-
+import ObjectDetailsPage from './Page/ObjectDetailsPage'
 
 const queryClient = new QueryClient();
 
@@ -34,15 +34,17 @@ const router = createBrowserRouter([
         path: '/advanced-search',
         element: <AdvancedSearch />,
       },
+      {
+        path: "/object/:objectId",
+        element: <ObjectDetailsPage />,
+      },
     ],
   },
 ]);
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    <RouterProvider router={router} />
   );
 }
 
