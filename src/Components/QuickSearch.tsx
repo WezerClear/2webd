@@ -1,5 +1,3 @@
-// QuickSearch.tsx
-
 import React, { useState } from 'react';
 
 interface QuickSearchProps {
@@ -12,7 +10,6 @@ const QuickSearch: React.FC<QuickSearchProps> = ({ onSearch }) => {
   const [searchTags, setSearchTags] = useState(false);
 
   const handleSearch = async () => {
-    // Appeler la fonction de recherche avec le terme de recherche et les options
     const results = await onSearch(query, { title: searchTitle, tags: searchTags });
     console.log('Résultats de la recherche :', results);
   };
