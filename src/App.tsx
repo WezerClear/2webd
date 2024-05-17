@@ -1,31 +1,36 @@
-
-//import React from 'react';
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import SearchResultsPage from './Page/SearchResultsPage';
-import QuickSearchBar from './Components/QuickSearchBar';
-import ObjectDetailsPage from './Page/ObjectDetailsPage';
-
-const queryClient = new QueryClient();
+import React from "react";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import "./App.css";
+import Menu from "./Components/Menu"; 
+import DisplayHighlight from "./Page/DisplayHighlight"; 
+import AdvancedSearch from "./Page/AdvancedSearch";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
+    errorElement: (
+      <div>
+        Page non trouvée
+        <br />
+        <a href="/">Retour à l'accueil</a>
+      </div>
+    ),
     element: (
       <div>
-        <header>
-          <QuickSearchBar onSearch={handleSearch} />
-        </header>
-        <main>
-          <Outlet />
-        </main>
-        <footer>
-        </footer>
+        <h1>Menu Musée</h1>
+        <Menu /> {/* Utilisez Menu sans accolades */}
+        <Outlet />
       </div>
     ),
     children: [
-      { path: 'search-results', element: <SearchResultsPage results={[]} totalResults={0} searchQuery="" categories={[]} /> },
-      { path: 'object/:objectId', element: <ObjectDetailsPage /> },
+      {
+        path: "/",
+        element: <DisplayHighlight />, 
+      },
+      {
+        path: "/advanced-search",
+        element: <AdvancedSearch />,
+      },
     ],
   },
 ]);
@@ -39,7 +44,3 @@ function App() {
 }
 
 export default App;
-function handleSearch(query: string, options: { title?: boolean | undefined; tags?: boolean | undefined; }): Promise<string[]> {
-  throw new Error('Function not implemented.');
-}
-
