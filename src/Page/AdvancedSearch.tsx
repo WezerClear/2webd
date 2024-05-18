@@ -32,9 +32,9 @@ const AdvancedSearch: React.FC = () => {
   };
 
   return (
-    <div className="advanced-search-container"> {/* Utilisez une classe différente pour le conteneur */}
-      <h1 className="advanced-search-title">Advanced Search</h1> {/* Utilisez une classe différente pour le titre */}
-      <div className="search-bar">
+    <div className="advanced-search-container">
+      <h1 className="advanced-search-title">Advanced Search</h1>
+      <div className="search-bar advanced-search-bar">
         <input
           type="text"
           placeholder="Title"
@@ -53,7 +53,7 @@ const AdvancedSearch: React.FC = () => {
           value={accessionYear}
           onChange={(e) => setAccessionYear(e.target.value)}
         />
-        <button onClick={handleSearch}>Search</button>
+        <button className="search-button" onClick={handleSearch}>Search</button>
       </div>
       {searchResults.length > 0 && (
         <div className="search-results">

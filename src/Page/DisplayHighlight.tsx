@@ -4,7 +4,6 @@ import searchArtObjects from "../Query/searchArtObjects";
 import DisplayHighlightContent from "../Components/DisplayHighlightContent";
 import "../App.css";
 
-
 interface ArtObject {
   objectID: number;
   title: string;
@@ -15,10 +14,12 @@ const DisplayHighlight: React.FC = () => {
   const [artObjects, setArtObjects] = useState<ArtObject[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState<ArtObject[]>([]);
+  const [loading, setLoading] = useState<boolean>(false); // Ajout de la propriété loading
 
   useEffect(() => {
     const fetchArtObjects = async () => {
       try {
+        setLoading(true); // Définir loading sur true pendant le chargement
         const objectIDs = [100, 200, 300, 400, 500];
         const objectsData: ArtObject[] = [];
         for (const id of objectIDs) {
@@ -28,6 +29,8 @@ const DisplayHighlight: React.FC = () => {
         setArtObjects(objectsData);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Rétablir loading sur false après le chargement
       }
     };
 
@@ -36,21 +39,27 @@ const DisplayHighlight: React.FC = () => {
 
   const handleSearch = async () => {
     try {
+      setLoading(true); // Définir loading sur true pendant la recherche
       const objectsData = await searchArtObjects(searchTerm);
       setSearchResults(objectsData);
     } catch (error) {
       console.error("Error searching data:", error);
+    } finally {
+      setLoading(false); // Rétablir loading sur false après la recherche
     }
   };
 
   return (
-    <DisplayHighlightContent
-      artObjects={artObjects}
-      searchTerm={searchTerm}
-      searchResults={searchResults}
-      onSearchTermChange={setSearchTerm}
-      onSearch={handleSearch}
-    />
+    <div className="text-center">
+      <DisplayHighlightContent
+        artObjects={artObjects}
+        searchTerm={searchTerm}
+        searchResults={searchResults}
+        onSearchTermChange={setSearchTerm}
+        onSearch={handleSearch}
+        loading={loading} // Passer la propriété loading à DisplayHighlightContent
+      />
+    </div>
   );
 };
 

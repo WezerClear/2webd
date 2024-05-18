@@ -14,26 +14,29 @@ const AdvancedSearchForm: React.FC<AdvancedSearchFormProps> = ({ onSearch }) => 
   };
 
   return (
-    <div className="search-bar">
-      <input
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Artist Name"
-        value={artistDisplayName}
-        onChange={(e) => setArtistDisplayName(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Accession Year"
-        value={accessionYear}
-        onChange={(e) => setAccessionYear(e.target.value)}
-      />
-      <button onClick={handleSearch}>Search</button>
+    <div className="advanced-search-container">
+      <h1 className="advanced-search-title">Advanced Search</h1>
+      <div className="search-bar advanced-search-bar">
+        <input
+          type="text"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Artist Name"
+          value={artistDisplayName}
+          onChange={(e) => setArtistDisplayName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Accession Year"
+          value={accessionYear}
+          onChange={(e) => setAccessionYear(e.target.value)}
+        />
+        <button className="search-button" onClick={handleSearch}>Search</button>
+      </div>
     </div>
   );
 };
