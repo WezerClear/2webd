@@ -1,10 +1,14 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "../App.css";
+import advancedSearch from "../Query/advancedSearch";
 
 interface ArtObject {
   objectID: number;
   title: string;
   primaryImage: string;
+  artistDisplayName: string;
+  accessionYear: string;
 }
 
 const AdvancedSearch: React.FC = () => {
@@ -20,33 +24,8 @@ const AdvancedSearch: React.FC = () => {
       if (artistDisplayName) queryParams.append("artistDisplayName", artistDisplayName);
       if (accessionYear) queryParams.append("accessionYear", accessionYear);
 
-      const searchResponse = await fetch(
-        `https://collectionapi.metmuseum.org/public/collection/v1/search?${queryParams.toString()}`
-      );
-      if (!searchResponse.ok) {
-        throw new Error("Failed to search objects");
-      }
-      const searchData = await searchResponse.json();
-      if (searchData.objectIDs && searchData.objectIDs.length > 0) {
-        const objectsData: ArtObject[] = [];
-        for (const objectID of searchData.objectIDs.slice(0, 10)) {
-          const objectResponse = await fetch(
-            `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`
-          );
-          if (!objectResponse.ok) {
-            throw new Error("Failed to fetch object");
-          }
-          const objectData = await objectResponse.json();
-          objectsData.push({
-            objectID: objectData.objectID,
-            title: objectData.title,
-            primaryImage: objectData.primaryImage,
-          });
-        }
-        setSearchResults(objectsData);
-      } else {
-        setSearchResults([]);
-      }
+      const objectsData = await advancedSearch(queryParams);
+      setSearchResults(objectsData);
     } catch (error) {
       console.error("Error searching data:", error);
     }
@@ -80,10 +59,14 @@ const AdvancedSearch: React.FC = () => {
         <div className="search-results">
           <h2>Search Results</h2>
           {searchResults.map((result) => (
-            <div key={result.objectID} className="art-item">
-              <h3>{result.title}</h3>
-              <img src={result.primaryImage} alt={result.title} />
-            </div>
+            <Link key={result.objectID} to={`/object/${result.objectID}`}>
+              <div className="art-item">
+                <h3>{result.title}</h3>
+                <p>Artist: {result.artistDisplayName}</p>
+                <p>Year: {result.accessionYear}</p>
+                <img src={result.primaryImage} alt={result.title} />
+              </div>
+            </Link>
           ))}
         </div>
       )}

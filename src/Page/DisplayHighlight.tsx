@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "../App.css";
+import fetchArtObject from "../Query/fetchArtObject";
+import searchArtObjects from "../Query/searchArtObjects";
+import DisplayHighlightContent from "../Components/DisplayHighlightContent";
+
 
 interface ArtObject {
   objectID: number;
@@ -16,21 +20,10 @@ const DisplayHighlight: React.FC = () => {
     const fetchArtObjects = async () => {
       try {
         const objectIDs = [100, 200, 300, 400, 500];
-
         const objectsData: ArtObject[] = [];
         for (const id of objectIDs) {
-          const objectResponse = await fetch(
-            `https://collectionapi.metmuseum.org/public/collection/v1/objects/${id}`
-          );
-          if (!objectResponse.ok) {
-            throw new Error("Failed to fetch object");
-          }
-          const objectData = await objectResponse.json();
-          objectsData.push({
-            objectID: objectData.objectID,
-            title: objectData.title,
-            primaryImage: objectData.primaryImage,
-          });
+          const objectData = await fetchArtObject(id);
+          objectsData.push(objectData);
         }
         setArtObjects(objectsData);
       } catch (error) {
@@ -43,70 +36,21 @@ const DisplayHighlight: React.FC = () => {
 
   const handleSearch = async () => {
     try {
-      const searchResponse = await fetch(
-        `https://collectionapi.metmuseum.org/public/collection/v1/search?q=${searchTerm}`
-      );
-      if (!searchResponse.ok) {
-        throw new Error("Failed to search object");
-      }
-      const searchData = await searchResponse.json();
-      if (searchData.objectIDs.length > 0) {
-        const objectsData: ArtObject[] = [];
-        for (const objectID of searchData.objectIDs.slice(0, 5)) { 
-          const objectResponse = await fetch(
-            `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`
-          );
-          if (!objectResponse.ok) {
-            throw new Error("Failed to fetch object");
-          }
-          const objectData = await objectResponse.json();
-          objectsData.push({
-            objectID: objectData.objectID,
-            title: objectData.title,
-            primaryImage: objectData.primaryImage,
-          });
-        }
-        setSearchResults(objectsData);
-      } else {
-        setSearchResults([]);
-      }
+      const objectsData = await searchArtObjects(searchTerm);
+      setSearchResults(objectsData);
     } catch (error) {
       console.error("Error searching data:", error);
     }
   };
 
   return (
-    <div className="App">
-      <h1>Metropolitan Museum of Art</h1>
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button onClick={handleSearch}>Search</button>
-      </div>
-      {searchResults.length > 0 && (
-        <div className="search-results">
-          <h2>Search Results</h2>
-          {searchResults.map((result) => (
-            <div key={result.objectID} className="art-item">
-              <h3>{result.title}</h3>
-              <img src={result.primaryImage} alt={result.title} />
-            </div>
-          ))}
-        </div>
-      )}
-      <div className="art-list">
-        {artObjects.map((artObject) => (
-          <div key={artObject.objectID} className="art-item">
-            <h3>{artObject.title}</h3>
-            <img src={artObject.primaryImage} alt={artObject.title} />
-          </div>
-        ))}
-      </div>
-    </div>
+    <DisplayHighlightContent
+      artObjects={artObjects}
+      searchTerm={searchTerm}
+      searchResults={searchResults}
+      onSearchTermChange={setSearchTerm}
+      onSearch={handleSearch}
+    />
   );
 };
 
