@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useObjectDetailQuery } from "../Query/useObjectDetailQuery";
+import "./ObjectDeatilPage.css";
+import "../App.css";
 
 export default function ObjectDetailPage() {
     const { objectId } = useParams();

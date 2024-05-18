@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "../App.css";
 import advancedSearch from "../Query/advancedSearch";
+import "../App.css";
 
 interface ArtObject {
   objectID: number;
@@ -32,8 +32,8 @@ const AdvancedSearch: React.FC = () => {
   };
 
   return (
-    <div className="App">
-      <h1>Advanced Search</h1>
+    <div className="advanced-search-container"> {/* Utilisez une classe différente pour le conteneur */}
+      <h1 className="advanced-search-title">Advanced Search</h1> {/* Utilisez une classe différente pour le titre */}
       <div className="search-bar">
         <input
           type="text"

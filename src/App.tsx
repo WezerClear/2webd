@@ -1,10 +1,12 @@
+import React from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './App.css';
 import Menu from './Components/Menu';
 import DisplayHighlight from './Page/DisplayHighlight';
 import AdvancedSearch from './Page/AdvancedSearch';
-import ObjectDetailsPage from './Page/ObjectDetailsPage'
+import ObjectDetailsPage from './Page/ObjectDetailsPage';
+import MuseumObjectPage from './Page/MuseumObjectPage';
 
 const queryClient = new QueryClient();
 
@@ -20,8 +22,7 @@ const router = createBrowserRouter([
     ),
     element: (
       <div>
-        <h1>Menu Musée</h1>
-        <Menu /> {}
+        <Menu />
         <Outlet />
       </div>
     ),
@@ -31,11 +32,15 @@ const router = createBrowserRouter([
         element: <DisplayHighlight />,
       },
       {
+        path: '/object',
+        element: <MuseumObjectPage />,
+      },
+      {
         path: '/advanced-search',
         element: <AdvancedSearch />,
       },
       {
-        path: "/object/:objectId",
+        path: '/object/:objectId',
         element: <ObjectDetailsPage />,
       },
     ],
@@ -44,7 +49,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   );
 }
 

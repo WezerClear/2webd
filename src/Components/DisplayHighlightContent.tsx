@@ -37,14 +37,16 @@ const DisplayHighlightContent: React.FC<DisplayHighlightContentProps> = ({
       {searchResults.length > 0 && (
         <div className="search-results">
           <h2>Search Results</h2>
-          {searchResults.map((result) => (
-            <Link key={result.objectID} to={`/object/${result.objectID}`}>
-              <div className="art-item">
-                <h3>{result.title}</h3>
-                <img src={result.primaryImage} alt={result.title} />
-              </div>
-            </Link>
-          ))}
+          <div className="art-list">
+            {searchResults.map((result) => (
+              <Link key={result.objectID} to={`/object/${result.objectID}`}>
+                <div className="art-item">
+                  <h3>{result.title}</h3>
+                  <img src={result.primaryImage} alt={result.title} />
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       )}
       <div className="art-list">

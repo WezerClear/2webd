@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import "../App.css";
 import fetchArtObject from "../Query/fetchArtObject";
 import searchArtObjects from "../Query/searchArtObjects";
 import DisplayHighlightContent from "../Components/DisplayHighlightContent";
+import "../App.css";
 
 
 interface ArtObject {

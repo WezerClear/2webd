@@ -5,7 +5,7 @@ export function useObjectDetailQuery(objectId: number) {
   return useQuery({
     queryKey: ['object', objectId], 
     queryFn: async () => {
-        const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectId}`); // Replace with your actual API endpoint
+        const response = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectId}`); 
 
       if (!response.ok) {
         throw new Error('Failed to fetch object details'); 

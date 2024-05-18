@@ -1,0 +1,33 @@
+.navbar {
+    background-color: #333; /* Couleur de fond de la barre de navigation */
+    padding: 10px 0; /* Ajout de rembourrage en haut et en bas */
+  }
+  
+  .navbar-container {
+    max-width: 1200px; /* Largeur maximale du conteneur */
+    margin: 0 auto; /* Centrage du conteneur */
+  }
+  
+  .navbar-menu {
+    list-style-type: none; /* Suppression des puces de liste */
+    margin: 0; /* Suppression de la marge */
+    padding: 0; /* Suppression du rembourrage */
+    display: flex; /* Affichage en ligne des éléments */
+    justify-content: center; /* Centrage horizontal */
+  }
+  
+  .navbar-item {
+    margin-right: auto; /* Marge à droite entre les éléments */
+  }
+  
+  .navbar-link {
+    text-decoration: none; /* Suppression du soulignement des liens */
+    color: #fff; /* Couleur du texte */
+    font-size: 1.1em; /* Taille de la police */
+    transition: color 0.3s ease; /* Transition de couleur */
+  }
+  
+  .navbar-link:hover {
+    color: #61dafb; /* Couleur du texte au survol */
+  }
+  
