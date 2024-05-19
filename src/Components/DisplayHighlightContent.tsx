@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import "../App.css";
 
 interface DisplayHighlightContentProps {
   artObjects: ArtObject[];
@@ -7,7 +8,7 @@ interface DisplayHighlightContentProps {
   searchResults: ArtObject[];
   onSearchTermChange: (term: string) => void;
   onSearch: () => void;
-  loading: boolean; // Ajout de l'état de chargement global
+  loading: boolean;
 }
 
 interface ArtObject {
@@ -25,6 +26,8 @@ const DisplayHighlightContent: React.FC<DisplayHighlightContentProps> = ({
   loading,
 }) => {
   const [loadingImages, setLoadingImages] = useState<{ [key: number]: boolean }>({});
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 4;
 
   const handleImageLoad = (id: number) => {
     setLoadingImages((prev) => ({ ...prev, [id]: false }));
@@ -35,11 +38,41 @@ const DisplayHighlightContent: React.FC<DisplayHighlightContentProps> = ({
   };
 
   const renderPlaceholder = () => (
-    <div className="art-item placeholder">
+    <div className="art-item placeholder placeholder-art-item">
       <div className="placeholder-image"></div>
       <div className="placeholder-text"></div>
     </div>
   );
+
+  const paginate = (items: ArtObject[], page: number) => {
+    const startIndex = (page - 1) * itemsPerPage;
+    return items.slice(startIndex, startIndex + itemsPerPage);
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const displayItems = searchTerm ? searchResults : artObjects;
+  const paginatedItems = paginate(displayItems, currentPage);
+
+  useEffect(() => {
+    // Charger les images des objets affichés
+    paginatedItems.forEach((artObject) => {
+      const img = new Image();
+      img.onload = () => handleImageLoad(artObject.objectID);
+      img.onerror = () => handleImageError(artObject.objectID);
+      img.src = artObject.primaryImage;
+    });
+  }, [paginatedItems]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   return (
     <div className="App">
@@ -53,57 +86,45 @@ const DisplayHighlightContent: React.FC<DisplayHighlightContentProps> = ({
         />
         <button onClick={onSearch}>Search</button>
       </div>
-      <div className="text-center"> {/* Wrapper pour les éléments centrés */}
-        {searchResults.length > 0 && (
-          <div className="search-results">
-            <h2>Search Results</h2>
+      <div className="text-center">
+        {loading
+          ? (
             <div className="art-list">
-              {loading ? (
-                Array.from({ length: 5 }).map((_, index) => <div key={index}>{renderPlaceholder()}</div>)
-              ) : (
-                searchResults.map((result) => (
-                  <Link key={result.objectID} to={`/object/${result.objectID}`}>
-                    <div className="art-item">
-                      <h3>{result.title}</h3>
-                      {loadingImages[result.objectID] && (
-                        <div className="placeholder-image">Loading...</div>
-                      )}
-                      <img
-                        src={result.primaryImage}
-                        alt={result.title}
-                        onLoad={() => handleImageLoad(result.objectID)}
-                        onError={() => handleImageError(result.objectID)}
-                        style={{ display: loadingImages[result.objectID] ? "none" : "block" }}
-                      />
-                    </div>
-                  </Link>
-                ))
-              )}
+              {Array.from({ length: itemsPerPage }).map((_, index) => (
+                <div key={index}>{renderPlaceholder()}</div>
+              ))}
             </div>
-          </div>
-        )}
-        <div className="art-list">
-          {loading ? (
-            Array.from({ length: 5 }).map((_, index) => <div key={index}>{renderPlaceholder()}</div>)
           ) : (
-            artObjects.map((artObject) => (
-              <Link key={artObject.objectID} to={`/object/${artObject.objectID}`}>
-                <div className="art-item">
-                  <h3>{artObject.title}</h3>
-                  {loadingImages[artObject.objectID] && (
-                    <div className="placeholder-image">Loading...</div>
-                  )}
-                  <img
-                    src={artObject.primaryImage}
-                    alt={artObject.title}
-                    onLoad={() => handleImageLoad(artObject.objectID)}
-                    onError={() => handleImageError(artObject.objectID)}
-                    style={{ display: loadingImages[artObject.objectID] ? "none" : "block" }}
-                  />
-                </div>
-              </Link>
-            ))
+            <div className="art-list">
+              {paginatedItems.map((artObject) => (
+                <Link key={artObject.objectID} to={`/object/${artObject.objectID}`}>
+                  <div className="art-item">
+                    <img
+                      src={artObject.primaryImage}
+                      alt={artObject.title}
+                      onLoad={() => handleImageLoad(artObject.objectID)}
+                      onError={() => handleImageError(artObject.objectID)}
+                      style={{ display: loadingImages[artObject.objectID] ? "none" : "block" }}
+                    />
+                    <h3>{artObject.title}</h3>
+                    {loadingImages[artObject.objectID] && (
+                      <div className="placeholder-image">Loading...</div>
+                    )}
+                  </div>
+                </Link>
+              ))}
+            </div>
           )}
+        <div className="pagination">
+          <button onClick={handlePrevPage} disabled={currentPage === 1}>
+            Précédent
+          </button>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage * itemsPerPage >= displayItems.length}
+          >
+            Suivant
+          </button>
         </div>
       </div>
     </div>

@@ -20,7 +20,7 @@ const DisplayHighlight: React.FC = () => {
     const fetchArtObjects = async () => {
       try {
         setLoading(true); // Définir loading sur true pendant le chargement
-        const objectIDs = [100, 200, 300, 400, 500];
+        const objectIDs = [100, 200, 300, 400, 500, 150, 245, 350, 50, 1, 25, 65];
         const objectsData: ArtObject[] = [];
         for (const id of objectIDs) {
           const objectData = await fetchArtObject(id);
