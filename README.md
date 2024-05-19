@@ -37,26 +37,49 @@ npm install
 
 ## Directory Structure:
 src/ : Main directory of your source code.
+
   App.css : Style file for the root component of the application.
+
   App.tsx : Main component of the application, acting as the entry point.
+
   Components/ : Directory to store reusable components of the application.
+
     AdvancedSearchForm.tsx : Component for the advanced search form.
+
     DisplayHighlightContent.tsx : Component for displaying featured content.
+
     Menu.css : Style file for the menu component.
+
     Menu.tsx : Component for the application menu.
+
     SearchResults.tsx : Component for displaying search results.
+
     Type.ts : File containing TypeScript types used in the application.
+
   Page/ : Directory to store page components of the application.
+
     AdvancedSearch.tsx : Page for advanced search.
+
     DisplayHighlight.tsx : Page for displaying featured content.
+
     MuseumObjectPage.tsx : Page for displaying details of a museum object.
+
     ObjectDeatilPage.css : Style file for the object details page.
+
     ObjectDetailsPage.tsx : Page for displaying details of a specific object.
+
   Query/ : Directory to store files related to API requests and data.
+
     advancedSearch.ts : Function to perform advanced search in the API.
+
     fetchArtObject.ts : Function to fetch art objects from the API.
+
     MuseumObjectQuery.ts : Query to query museum objects in the API.
+
     searchArtObjects.ts : Function to perform object search in the API.
+
     useObjectDetailQuery.ts : Custom hook to fetch details of an object from the API.
+
   index.css : Global style file for the application.
+  
   main.tsx : Main entry point of the application, used to render the root component.
