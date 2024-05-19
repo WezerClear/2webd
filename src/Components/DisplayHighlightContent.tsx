@@ -61,7 +61,6 @@ const DisplayHighlightContent: React.FC<DisplayHighlightContentProps> = ({
   const paginatedItems = paginate(displayItems, currentPage);
 
   useEffect(() => {
-    // Charger les images des objets affichés
     paginatedItems.forEach((artObject) => {
       const img = new Image();
       img.onload = () => handleImageLoad(artObject.objectID);
@@ -108,7 +107,7 @@ const DisplayHighlightContent: React.FC<DisplayHighlightContentProps> = ({
                     />
                     <h3>{artObject.title}</h3>
                     {loadingImages[artObject.objectID] && (
-                      <div className="placeholder-image">Loading...</div>
+                      <div className="placeholder-image"></div>
                     )}
                   </div>
                 </Link>

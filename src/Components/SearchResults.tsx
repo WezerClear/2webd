@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../App.css";
 
 interface SearchResultProps {
-  searchResults: ArtObject[]; // Importer explicitement l'interface ArtObject
+  searchResults: ArtObject[]; 
 }
 
 interface ArtObject {

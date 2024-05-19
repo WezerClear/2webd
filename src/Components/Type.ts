@@ -74,7 +74,7 @@ export type Measurement = {
     elementMeasurements: {
         Height: number;
         Width: number;
-        Length?: number; // Ajoutez d'autres dimensions si nécessaire
+        Length?: number; 
     };
 }
 

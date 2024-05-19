@@ -14,12 +14,12 @@ const DisplayHighlight: React.FC = () => {
   const [artObjects, setArtObjects] = useState<ArtObject[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchResults, setSearchResults] = useState<ArtObject[]>([]);
-  const [loading, setLoading] = useState<boolean>(false); // Ajout de la propriété loading
+  const [loading, setLoading] = useState<boolean>(false); 
 
   useEffect(() => {
     const fetchArtObjects = async () => {
       try {
-        setLoading(true); // Définir loading sur true pendant le chargement
+        setLoading(true); 
         const objectIDs = [100, 200, 300, 400, 500, 150, 245, 350, 50, 1, 25, 65];
         const objectsData: ArtObject[] = [];
         for (const id of objectIDs) {
@@ -30,7 +30,7 @@ const DisplayHighlight: React.FC = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
-        setLoading(false); // Rétablir loading sur false après le chargement
+        setLoading(false);
       }
     };
 
@@ -39,13 +39,13 @@ const DisplayHighlight: React.FC = () => {
 
   const handleSearch = async () => {
     try {
-      setLoading(true); // Définir loading sur true pendant la recherche
+      setLoading(true); 
       const objectsData = await searchArtObjects(searchTerm);
       setSearchResults(objectsData);
     } catch (error) {
       console.error("Error searching data:", error);
     } finally {
-      setLoading(false); // Rétablir loading sur false après la recherche
+      setLoading(false);
     }
   };
 
@@ -57,7 +57,7 @@ const DisplayHighlight: React.FC = () => {
         searchResults={searchResults}
         onSearchTermChange={setSearchTerm}
         onSearch={handleSearch}
-        loading={loading} // Passer la propriété loading à DisplayHighlightContent
+        loading={loading} 
       />
     </div>
   );
