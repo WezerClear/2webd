@@ -4,11 +4,71 @@ body {
   font-family: 'Roboto', sans-serif;
   background-color: #f3f4f6;
   color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
-.App {
+.main-content {
   text-align: center;
   padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto; 
+}
+
+.navbar {
+  background-color: #f3f4f6; 
+  color: #fff;
+  padding: 10px 0;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: flex-start; 
+}
+
+.navbar-menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.navbar-item {
+  margin: 0 20px;
+}
+
+.navbar-brand {
+  font-weight: bold; 
+  font-size: 2.2em; 
+  color: #fff; 
+}
+
+.navbar-link {
+  font-weight: bold; 
+  font-size: 1.2em; 
+  color: #fff; 
+}
+
+
+.navbar-link:hover {
+  color: #cbd5e0;
+}
+
+.main-content {
+  text-align: center;
+  padding: 20px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 h1 {
@@ -121,12 +181,6 @@ h1 {
   width: 100%;
   height: 150px;
   border-radius: 4px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.art-item img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 .image-placeholder,
